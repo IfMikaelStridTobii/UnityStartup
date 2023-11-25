@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 4427613559659150}
   - component: {fileID: 95096058574463750}
   - component: {fileID: 111744052045278198}
+  - component: {fileID: -8172894424662946009}
   m_Layer: 0
   m_Name: space_man_model
   m_TagString: Untagged
@@ -277,6 +278,20 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!136 &-8172894424662946009
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112338128624330}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1114138090204880
 GameObject:
   m_ObjectHideFlags: 0

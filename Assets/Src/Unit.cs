@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
 {
     [SerializeField] private PlayerController playerSubject;
     [SerializeField] public int numberOfUnitMembers = 5;
+    [SerializeField] public int memberHP = 50;
     [SerializeField] public float unitSpeed = 1f;
     [SerializeField] public Material quadMaterial;
     [SerializeField] public GameObject unitMemberPrefab;
@@ -18,7 +19,7 @@ public class Unit : MonoBehaviour
 
     public Guid UnitId { get; internal set; }
 
-    public event Action<Guid, OrderType, Vector3> onOrder;
+    public event Action<Guid, OrderType, Vector3> OnOrder;
 
     private VectorContainer _currentMovementOrder;
     private List<UnitMember> unitMembers;
@@ -39,10 +40,10 @@ public class Unit : MonoBehaviour
         SpawnUnitMembers();
 
         // Remove individual BoxColliders
-        foreach (BoxCollider collider in GetComponentsInChildren<BoxCollider>())
-        {
-            Destroy(collider);
-        }
+        //foreach (BoxCollider collider in GetComponentsInChildren<BoxCollider>())
+        //{
+        //    Destroy(collider);
+        //}
         CreateSelectionRing();
 
         AddCompoundCollider();
@@ -124,8 +125,8 @@ public class Unit : MonoBehaviour
             unitMember.transform.parent = transform;
             unitMember.SetParentID(this.UnitId);
             unitMember.SetParentSubject(this);
+            unitMember.maxHP = memberHP;
             unitMembers.Add(unitMember);
-            
         }
     }
 
@@ -133,6 +134,7 @@ public class Unit : MonoBehaviour
     {
         if (UnitId == _unitId)
         {
+            OnOrder?.Invoke(_unitId, OrderType.Move, movementCoordinates);
             movementCoordinates.y = 0.01f;
             StopAllCoroutines(); // Stop any ongoing interpolation
             StartCoroutine(MoveUnit(movementCoordinates));

@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            SelectUnit();
+            Selection();
         }
         if (Input.GetMouseButtonDown(1))
         {
@@ -32,17 +32,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void SelectUnit()
+    private void Selection()
     {
         RaycastHit hitInfo;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
         {
             // Check if the clicked object has the GameObjectExtensions script
             Unit unit = hitInfo.collider.GetComponent<Unit>();
+            UnitMember unitMember = hitInfo.collider.GetComponent<UnitMember>();
             if (unit != null)
             {
-                _selection.Add(unit);
-                unit.SetSelectionRingVisibility(true);
+                SelectUnit(unit);
+            }
+            else if (unitMember != null)
+            {
+                var parent = unitMember.transform.parent.GetComponent<Unit>();
+                SelectUnit(parent);
             }
             else
             {
@@ -53,5 +58,10 @@ public class PlayerController : MonoBehaviour
                 _selection.Clear();
             }
         }
+    }
+    private void SelectUnit(Unit unit)
+    {
+        _selection.Add(unit);
+        unit.SetSelectionRingVisibility(true);
     }
 }

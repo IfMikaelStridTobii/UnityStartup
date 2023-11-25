@@ -7,6 +7,28 @@ using UnityEngine;
 
 public class UnitMember : MonoBehaviour
 {
+    public int maxHP;
+    private int _currentHP;
+
+    public int currentHP
+    {
+        get { return _currentHP; }
+        set
+        {
+            if (_currentHP != value)
+            {
+                _currentHP = value;
+                OnHPChanged?.Invoke(_currentHP);
+
+                if (_currentHP <= 0)
+                {
+                    Die();
+                }
+            }
+        }
+    }
+
+    public event Action<int> OnHPChanged;
     private Unit parentSubject;
     private Guid parentID;
 
@@ -36,11 +58,11 @@ public class UnitMember : MonoBehaviour
 
     private void Start()
     {
-        parentSubject.onOrder += onOrder;
-        
+        currentHP = maxHP;
+        parentSubject.OnOrder += OnOrder;
     }
 
-    void onOrder(Guid _parentID, OrderType orderType, Vector3 destinationPoint)
+    void OnOrder(Guid _parentID, OrderType orderType, Vector3 destinationPoint)
     {
 
         if (_parentID == parentID)
@@ -48,7 +70,7 @@ public class UnitMember : MonoBehaviour
             switch (orderType)
             {
                 case OrderType.Move:
-                    moveUnitMember(destinationPoint);
+                    MoveUnitMember(destinationPoint);
                     break;
                 default:
                     break;
@@ -56,8 +78,13 @@ public class UnitMember : MonoBehaviour
         }
     }
 
-    private void moveUnitMember(Vector3 destinationPoint)
+    private void MoveUnitMember(Vector3 destinationPoint)
     {
         print("Moving member");
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }
