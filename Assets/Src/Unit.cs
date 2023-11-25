@@ -1,3 +1,4 @@
+using Assets.Src.Enums;
 using Assets.Src.Model;
 using System;
 using System.Collections;
@@ -13,11 +14,17 @@ public class Unit : MonoBehaviour
     [SerializeField] public GameObject unitMemberPrefab;
     [SerializeField] public float circleRadius = 2f;
     [SerializeField] public float rotationSpeed = 1f;
-    private VectorContainer _currentMovementOrder;
+
+
     public Guid UnitId { get; internal set; }
+
+    public event Action<Guid, OrderType, Vector3> onOrder;
+
+    private VectorContainer _currentMovementOrder;
     private List<UnitMember> unitMembers;
     private GameObject selectionRing;
     private bool isSelected = false;
+
     private void Start()
     {
         UnitId = Guid.NewGuid();
@@ -114,8 +121,11 @@ public class Unit : MonoBehaviour
             var instansiationObject = Instantiate(unitMemberPrefab, memberPosition, memberRotation);
             UnitMember unitMember = instansiationObject.AddComponent<UnitMember>();
 
-            unitMembers.Add(unitMember);
             unitMember.transform.parent = transform;
+            unitMember.SetParentID(this.UnitId);
+            unitMember.SetParentSubject(this);
+            unitMembers.Add(unitMember);
+            
         }
     }
 
