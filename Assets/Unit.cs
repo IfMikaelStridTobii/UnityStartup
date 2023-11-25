@@ -15,7 +15,7 @@ public class Unit : MonoBehaviour
     [SerializeField] public float rotationSpeed = 1f;
     private VectorContainer _currentMovementOrder;
     public Guid UnitId { get; internal set; }
-    private Transform[] unitMembers;
+    private List<UnitMember> unitMembers;
     private GameObject selectionRing;
     private bool isSelected = false;
     private void Start()
@@ -104,18 +104,17 @@ public class Unit : MonoBehaviour
 
     void SpawnUnitMembers()
     {
-        unitMembers = new Transform[numberOfUnitMembers];
+        unitMembers = new List<UnitMember>();
 
         for (int i = 0; i < numberOfUnitMembers; i++)
         {
             float angle = i * 2 * Mathf.PI / numberOfUnitMembers;
             Vector3 memberPosition = transform.position + new Vector3(Mathf.Cos(angle) * circleRadius, 0f, Mathf.Sin(angle) * circleRadius);
             Quaternion memberRotation = Quaternion.Euler(0f, -angle * Mathf.Rad2Deg, 0f);
+            var instansiationObject = Instantiate(unitMemberPrefab, memberPosition, memberRotation);
+            UnitMember unitMember = instansiationObject.AddComponent<UnitMember>();
 
-            GameObject unitMember = Instantiate(unitMemberPrefab, memberPosition, memberRotation);
-            unitMembers[i] = unitMember.transform;
-
-            // Set the parent of the unit member to the unit, so it moves with the unit
+            unitMembers.Add(unitMember);
             unitMember.transform.parent = transform;
         }
     }
@@ -131,8 +130,8 @@ public class Unit : MonoBehaviour
             int unitCount = 0;
             foreach (var unitMember in unitMembers)
             {
-                Quaternion finalRotation = Quaternion.LookRotation(movementCoordinates - unitMember.position);
-                unitMember.rotation = finalRotation;
+                Quaternion finalRotation = Quaternion.LookRotation(movementCoordinates - unitMember.transform.position);
+                unitMember.transform.rotation = finalRotation;
                 PlayAnimationOnUnitMember(unitCount, "Run");
                 unitCount++;
             }
