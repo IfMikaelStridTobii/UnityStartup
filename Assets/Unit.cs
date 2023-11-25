@@ -1,20 +1,8 @@
+using Assets.Src.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class VectorContainer
-{
-    public Guid UnitId { get; private set; }
-    public Vector3 OriginPoint { get; private set; }
-    public Vector3 DestinationPoint { get; private set; }
-
-    public void UpdateVectors(Vector3 newFirstVector, Vector3 newSecondVector)
-    {
-        OriginPoint = newFirstVector;
-        DestinationPoint = newSecondVector;
-    }
-}
 
 public class Unit : MonoBehaviour
 {
