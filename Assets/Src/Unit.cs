@@ -39,11 +39,6 @@ public class Unit : MonoBehaviour
         playerSubject.MovementOrder += OnMovementOrder;
         SpawnUnitMembers();
 
-        // Remove individual BoxColliders
-        //foreach (BoxCollider collider in GetComponentsInChildren<BoxCollider>())
-        //{
-        //    Destroy(collider);
-        //}
         CreateSelectionRing();
 
         AddCompoundCollider();
@@ -134,19 +129,8 @@ public class Unit : MonoBehaviour
     {
         if (UnitId == _unitId)
         {
-            OnOrder?.Invoke(_unitId, OrderType.Move, movementCoordinates);
             movementCoordinates.y = 0.01f;
-            StopAllCoroutines(); // Stop any ongoing interpolation
-            StartCoroutine(MoveUnit(movementCoordinates));
-            // Ensure the final rotation is towards the
-            int unitCount = 0;
-            foreach (var unitMember in unitMembers)
-            {
-                Quaternion finalRotation = Quaternion.LookRotation(movementCoordinates - unitMember.transform.position);
-                unitMember.transform.rotation = finalRotation;
-                PlayAnimationOnUnitMember(unitCount, "Run");
-                unitCount++;
-            }
+            OnOrder?.Invoke(_unitId, OrderType.Move, movementCoordinates);
         }
     }
 
@@ -174,24 +158,24 @@ public class Unit : MonoBehaviour
 
     private IEnumerator MoveUnit(Vector3 destination)
     {
-        float totalDistance = Vector3.Distance(transform.position, destination);
-        float elapsedTime = 0f;
-        Vector3 startPosition = transform.position;
+        //float totalDistance = Vector3.Distance(transform.position, destination);
+        //float elapsedTime = 0f;
+        //Vector3 startPosition = transform.position;
 
-        while (elapsedTime < 1f)
-        {
-            float currentSpeed = unitSpeed * Time.deltaTime / totalDistance;
-            transform.position = Vector3.Lerp(startPosition, destination, elapsedTime);
-            elapsedTime += currentSpeed;
+        //while (elapsedTime < 1f)
+        //{
+        //    float currentSpeed = unitSpeed * Time.deltaTime / totalDistance;
+        //    transform.position = Vector3.Lerp(startPosition, destination, elapsedTime);
+        //    elapsedTime += currentSpeed;
 
-            yield return null;
-        }
+        yield return null;
+        //}
 
-        transform.position = destination; // Ensure the final position is exactly the destination
-        for (int i = 0; i < numberOfUnitMembers; i++)
-        {
-            PlayAnimationOnUnitMember(i, "Idle");
-        }
+        //transform.position = destination; // Ensure the final position is exactly the destination
+        //for (int i = 0; i < numberOfUnitMembers; i++)
+        //{
+        //    PlayAnimationOnUnitMember(i, "Idle");
+        //}
     }
 
 

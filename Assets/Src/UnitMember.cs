@@ -3,13 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 
 public class UnitMember : MonoBehaviour
 {
     public int maxHP;
     private int _currentHP;
-
     public int currentHP
     {
         get { return _currentHP; }
@@ -31,6 +30,9 @@ public class UnitMember : MonoBehaviour
     public event Action<int> OnHPChanged;
     private Unit parentSubject;
     private Guid parentID;
+    private NavMeshAgent navMeshAgent;
+    private bool hasMovementOrder;
+    private Vector3 _destinationPoint;
 
     // Setter method to set the parent ID
     public void SetParentID(Guid id)
@@ -60,8 +62,31 @@ public class UnitMember : MonoBehaviour
     {
         currentHP = maxHP;
         parentSubject.OnOrder += OnOrder;
+
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        if (navMeshAgent == null)
+        {
+            // Add NavMeshAgent if not already attached
+            navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
+        }
+
+        // TODO: Set NavMeshAgent properties here (e.g., speed, acceleration, etc.)
     }
 
+    private void Update()
+    {
+        float distanceToDestination = Vector3.Distance(transform.position, _destinationPoint);
+
+        if (hasMovementOrder && navMeshAgent != null && distanceToDestination > 0.5f)
+        {
+            navMeshAgent.SetDestination(_destinationPoint);
+        }
+        else
+        {
+            hasMovementOrder = false;
+            PlayAnimation("Idle");
+        }
+    }
     void OnOrder(Guid _parentID, OrderType orderType, Vector3 destinationPoint)
     {
 
@@ -80,7 +105,19 @@ public class UnitMember : MonoBehaviour
 
     private void MoveUnitMember(Vector3 destinationPoint)
     {
-        print("Moving member");
+        hasMovementOrder = true;
+        PlayAnimation("Run");
+        _destinationPoint = destinationPoint;
+    }
+
+    public void PlayAnimation(string animationIdentifier)
+    {
+        Animator memberAnimator = this.GetComponent<Animator>();
+        if (memberAnimator != null)
+        {
+            memberAnimator.Play(animationIdentifier);
+        }
+
     }
 
     private void Die()
