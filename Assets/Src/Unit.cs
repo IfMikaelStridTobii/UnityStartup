@@ -1,5 +1,6 @@
 using Assets.Src.Enums;
 using Assets.Src.Model;
+using Assets.Src.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private PlayerController playerSubject;
+    [SerializeField] private PlayerController playerController;
     [SerializeField] public int numberOfUnitMembers = 5;
     [SerializeField] public int memberHP = 50;
     [SerializeField] public float unitSpeed = 1f;
@@ -21,6 +22,7 @@ public class Unit : MonoBehaviour
 
     public event Action<Guid, OrderType, Vector3> OnOrder;
 
+    private SelectionController _selectionControllerSubject;
     private VectorContainer _currentMovementOrder;
     private List<UnitMember> unitMembers;
     private GameObject selectionRing;
@@ -36,7 +38,8 @@ public class Unit : MonoBehaviour
         // Adjust the size of the collider according to your Unit size
         boxCollider.size = new Vector3(1f, 1f, 1f);
 
-        playerSubject.MovementOrder += OnMovementOrder;
+        _selectionControllerSubject = playerController.GetSelectionController();
+        _selectionControllerSubject.MovementOrder += OnMovementOrder;
         SpawnUnitMembers();
 
         CreateSelectionRing();
@@ -108,13 +111,17 @@ public class Unit : MonoBehaviour
     void SpawnUnitMembers()
     {
         unitMembers = new List<UnitMember>();
-
+        int rowSize = (int)Mathf.Sqrt(numberOfUnitMembers);  // Adjust this based on your preference
+        float spacing = 2.0f;
         for (int i = 0; i < numberOfUnitMembers; i++)
         {
-            float angle = i * 2 * Mathf.PI / numberOfUnitMembers;
-            Vector3 memberPosition = transform.position + new Vector3(Mathf.Cos(angle) * circleRadius, 0f, Mathf.Sin(angle) * circleRadius);
-            Quaternion memberRotation = Quaternion.Euler(0f, -angle * Mathf.Rad2Deg, 0f);
-            var instansiationObject = Instantiate(unitMemberPrefab, memberPosition, memberRotation);
+
+            int row = i / rowSize;
+            int col = i % rowSize;
+
+            Vector3 position = new Vector3(col * spacing, 0, row * spacing);
+
+            var instansiationObject = Instantiate(unitMemberPrefab, position, Quaternion.identity);
             UnitMember unitMember = instansiationObject.AddComponent<UnitMember>();
 
             unitMember.transform.parent = transform;
@@ -156,29 +163,6 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveUnit(Vector3 destination)
-    {
-        //float totalDistance = Vector3.Distance(transform.position, destination);
-        //float elapsedTime = 0f;
-        //Vector3 startPosition = transform.position;
-
-        //while (elapsedTime < 1f)
-        //{
-        //    float currentSpeed = unitSpeed * Time.deltaTime / totalDistance;
-        //    transform.position = Vector3.Lerp(startPosition, destination, elapsedTime);
-        //    elapsedTime += currentSpeed;
-
-        yield return null;
-        //}
-
-        //transform.position = destination; // Ensure the final position is exactly the destination
-        //for (int i = 0; i < numberOfUnitMembers; i++)
-        //{
-        //    PlayAnimationOnUnitMember(i, "Idle");
-        //}
-    }
-
-
     private void Update()
     {
         // Rotate the texture if the unit is selected
@@ -190,9 +174,9 @@ public class Unit : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (playerSubject != null)
+        if (playerController != null)
         {
-            playerSubject.MovementOrder -= OnMovementOrder;
+            _selectionControllerSubject.MovementOrder -= OnMovementOrder;
         }
 
     }

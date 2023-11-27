@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using System;
 
-public class PlayerController : MonoBehaviour
+public class SelectionController : MonoBehaviour
 {
     public event Action<Guid, Vector3> MovementOrder;
 

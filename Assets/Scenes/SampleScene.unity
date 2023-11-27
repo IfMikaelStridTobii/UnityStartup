@@ -1985,7 +1985,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c50c094eb4fb794299b9456295a5fdc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ada3cc22c7e7d540b598bcc879537ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1293842402 stripped
@@ -2005,7 +2005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4722a8b1c60a134da71c2654466063f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSubject: {fileID: 963194229}
+  playerSubject: {fileID: 0}
   numberOfUnitMembers: 5
   memberHP: 50
   unitSpeed: 4
