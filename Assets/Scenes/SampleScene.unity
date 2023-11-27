@@ -2005,7 +2005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4722a8b1c60a134da71c2654466063f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSubject: {fileID: 0}
+  playerController: {fileID: 963194229}
   numberOfUnitMembers: 5
   memberHP: 50
   unitSpeed: 4
