@@ -9,12 +9,12 @@ namespace Assets.Src.Player
 {
     class PlayerController:MonoBehaviour
     {
-        private MovementController movementController;
+        private CameraController movementController;
         private SelectionController selectionController;
 
         void Start()
         {
-            movementController = gameObject.AddComponent<MovementController>();
+            movementController = gameObject.AddComponent<CameraController>();
             selectionController = gameObject.AddComponent<SelectionController>();
         }
         public SelectionController GetSelectionController()
