@@ -138,8 +138,8 @@ public class UnitMember : MonoBehaviour
     {
         // Rotate the texture here
         // You can adjust the rotation speed based on your preferences
-        float rotationAngle = 1f * Time.deltaTime;
-        ringQuad.transform.Rotate(Vector3.up, rotationAngle);
+        float rotationAngle = 10f * Time.deltaTime;
+        ringQuad.transform.Rotate(Vector3.back, rotationAngle);
     }
 
     void OnOrder(Guid _parentID, OrderType orderType, Vector3 destinationPoint)
@@ -158,7 +158,7 @@ public class UnitMember : MonoBehaviour
         }
     }
 
-    private void MoveUnitMember(Vector3 destinationPoint)
+    public void MoveUnitMember(Vector3 destinationPoint)
     {
         hasMovementOrder = true;
         PlayAnimation("Run");
