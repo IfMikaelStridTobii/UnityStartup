@@ -2006,7 +2006,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 963194229}
-  numberOfUnitMembers: 5
+  numberOfUnitMembers: 3
   memberHP: 50
   unitSpeed: 4
   quadMaterial: {fileID: 2100000, guid: 0585bf25bc806c44bbee18bd776b2584, type: 2}

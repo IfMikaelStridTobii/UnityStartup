@@ -113,22 +113,29 @@ public class Unit : MonoBehaviour
         unitMembers = new List<UnitMember>();
         int rowSize = (int)Mathf.Sqrt(numberOfUnitMembers);  // Adjust this based on your preference
         float spacing = 2.0f;
+
         for (int i = 0; i < numberOfUnitMembers; i++)
         {
-
             int row = i / rowSize;
             int col = i % rowSize;
 
-            Vector3 position = new Vector3(col * spacing, 0, row * spacing);
+            // Calculate the center position for the prefab instantiation
+            Vector3 centerPosition = new Vector3((rowSize - 1) * spacing / 2f, 0, (rowSize - 1) * spacing / 2f);
 
-            var instansiationObject = Instantiate(unitMemberPrefab, position, Quaternion.identity);
-            UnitMember unitMember = instansiationObject.AddComponent<UnitMember>();
+            // Calculate the final position
+            Vector3 position = new Vector3(col * spacing, 0, row * spacing) - centerPosition;
 
+            // Instantiate the unit member prefab
+            var instantiationObject = Instantiate(unitMemberPrefab, position, Quaternion.identity);
+            UnitMember unitMember = instantiationObject.AddComponent<UnitMember>();
+
+            // Set unit member properties
             unitMember.transform.parent = transform;
             unitMember.SetParentID(this.UnitId);
             unitMember.SetParentSubject(this);
             unitMember.maxHP = memberHP;
             unitMembers.Add(unitMember);
+
         }
     }
 
