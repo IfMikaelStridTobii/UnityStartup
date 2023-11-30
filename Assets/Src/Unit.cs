@@ -41,45 +41,16 @@ public class Unit : MonoBehaviour
         _selectionControllerSubject = playerController.GetSelectionController();
         _selectionControllerSubject.MovementOrder += OnMovementOrder;
         SpawnUnitMembers();
-
-        CreateSelectionRing();
-
         AddCompoundCollider();
-
-        SetSelectionRingVisibility(false);
-    }
-
-    private void CreateSelectionRing()
-    {
-        // Create an empty GameObject for the selection ring
-        selectionRing = new GameObject("SelectionRing");
-        selectionRing.transform.parent = transform;
-
-        // Create a quad for the ring
-        GameObject ringQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        ringQuad.name = "RingQuad";
-        ringQuad.transform.parent = selectionRing.transform;
-
-        // Adjust the scale and position to make it look like a ring
-        // You may need to tweak these values based on your unit's size
-        ringQuad.transform.localScale = new Vector3(circleRadius * 2, circleRadius * 2, 2f);
-
-        // Position the ring at the base of the unit
-        ringQuad.transform.localPosition = new Vector3(0f, 0.01f, 0f); // At the base of the unit
-
-        ringQuad.transform.Rotate(new Vector3(90, 0, 0));
-
-        ringQuad.GetComponent<Renderer>().material = quadMaterial;
     }
 
 
     public void SetSelectionRingVisibility(bool visible)
     {
-        if (selectionRing != null)
+        unitMembers.ForEach(member =>
         {
-            selectionRing.SetActive(visible);
-            isSelected = visible;
-        }
+            member.SetSelectionRingVisibility(visible);
+        });
     }
 
     private void AddCompoundCollider()
@@ -100,13 +71,13 @@ public class Unit : MonoBehaviour
         compoundCollider.size = compoundBounds.size;
     }
 
-    private void RotateTexture()
-    {
-        // Rotate the texture here
-        // You can adjust the rotation speed based on your preferences
-        float rotationAngle = rotationSpeed * Time.deltaTime;
-        selectionRing.transform.Rotate(Vector3.up, rotationAngle);
-    }
+    //private void RotateTexture()
+    //{
+    //    // Rotate the texture here
+    //    // You can adjust the rotation speed based on your preferences
+    //    float rotationAngle = rotationSpeed * Time.deltaTime;
+    //    selectionRing.transform.Rotate(Vector3.up, rotationAngle);
+    //}
 
     void SpawnUnitMembers()
     {
@@ -170,14 +141,14 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        // Rotate the texture if the unit is selected
-        if (isSelected)
-        {
-            RotateTexture();
-        }
-    }
+    //private void Update()
+    //{
+    //    // Rotate the texture if the unit is selected
+    //    if (isSelected)
+    //    {
+    //        RotateTexture();
+    //    }
+    //}
 
     private void OnDestroy()
     {

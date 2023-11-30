@@ -39,6 +39,7 @@ public class UnitMember : MonoBehaviour
     private GameObject selectionRing;
     private float circleRadius = 1.0f; // Adjust this based on your preference
     public Material quadMaterial;
+    private GameObject ringQuad;
     // Setter method to set the parent ID
     public void SetParentID(Guid id)
     {
@@ -75,48 +76,21 @@ public class UnitMember : MonoBehaviour
 
         if (navMeshAgent == null)
         {
-            // Add NavMeshAgent if not already attached
             navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
             // TODO: Set NavMeshAgent properties here (e.g., speed, acceleration, etc.)
             navMeshAgent.radius = 0.2f;
         }
 
+        SetSelectionRingVisibility(false);
     }
-
-    private void LoadMaterials()
-    {
-        // Find Renderer component dynamically (in the children)
-        Renderer rendererComponent = GetComponentInChildren<Renderer>();
-
-        if (rendererComponent != null)
-        {
-            // Load material from Resources folder
-            Material loadedMaterial = Resources.Load<Material>(ringMaterialName);
-
-            // Apply the material to the found renderer component
-            if (loadedMaterial != null)
-            {
-                rendererComponent.material = loadedMaterial;
-            }
-            else
-            {
-                Debug.LogError("Material not found: " + ringMaterialName);
-            }
-        }
-        else
-        {
-            Debug.LogError("Renderer component not found in children.");
-        }
-    }
-
 
     private void CreateSelectionRing()
     {
-        // Create an empty GameObject for the selection ring as a child of the unit member
-        selectionRing = new GameObject("SelectionRing");
-        selectionRing.transform.parent = transform;
+        //// Create an empty GameObject for the selection ring as a child of the unit member
+        //selectionRing = new GameObject("SelectionRing");
+        //selectionRing.transform.parent = transform;
         // Create a quad for the ring
-        GameObject ringQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        ringQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
         
         Destroy(ringQuad.GetComponent<Collider>());
         ringQuad.name = "RingQuad";
@@ -129,6 +103,14 @@ public class UnitMember : MonoBehaviour
         ringQuad.transform.Rotate(new Vector3(90, 0, 0));
         ringQuad.transform.SetParent(this.transform);
         ringQuad.GetComponent<Renderer>().material = (Material)Resources.Load(ringMaterialName);
+    }
+
+    public void SetSelectionRingVisibility(bool visible)
+    {
+        if (ringQuad != null)
+        {
+            ringQuad.SetActive(visible);
+        }
     }
 
     private void Update()
