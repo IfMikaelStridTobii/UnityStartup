@@ -36,10 +36,10 @@ public class UnitMember : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     private bool hasMovementOrder;
     private Vector3 _destinationPoint;
-    private GameObject selectionRing;
     private float circleRadius = 1.0f; // Adjust this based on your preference
     public Material quadMaterial;
     private GameObject ringQuad;
+    private bool isSelected = false;
     // Setter method to set the parent ID
     public void SetParentID(Guid id)
     {
@@ -110,6 +110,7 @@ public class UnitMember : MonoBehaviour
         if (ringQuad != null)
         {
             ringQuad.SetActive(visible);
+            isSelected = visible;
         }
     }
 
@@ -126,7 +127,21 @@ public class UnitMember : MonoBehaviour
             hasMovementOrder = false;
             PlayAnimation("Idle");
         }
+
+        if (isSelected)
+        {
+            RotateTexture();
+        }
     }
+
+    private void RotateTexture()
+    {
+        // Rotate the texture here
+        // You can adjust the rotation speed based on your preferences
+        float rotationAngle = 1f * Time.deltaTime;
+        ringQuad.transform.Rotate(Vector3.up, rotationAngle);
+    }
+
     void OnOrder(Guid _parentID, OrderType orderType, Vector3 destinationPoint)
     {
 
