@@ -51,17 +51,30 @@ public class SelectionController : MonoBehaviour
             }
             else
             {
-                foreach (var selectedUnit in _selection)
-                {
-                    selectedUnit.SetSelectionRingVisibility(false);
-                }
-                _selection.Clear();
+                DeselectUnits();
             }
         }
     }
+
+    private void DeselectUnits()
+    {
+        foreach (var selectedUnit in _selection)
+        {
+            selectedUnit.SetSelectionRingVisibility(false);
+        }
+        _selection.Clear();
+    }
+
     private void SelectUnit(Unit unit)
     {
+        // Assuming _selection is a List<Unit> and DeselectUnits() is a method that deselects units
+        if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
+        {
+            DeselectUnits();
+        }
+
         _selection.Add(unit);
+
         unit.SetSelectionRingVisibility(true);
     }
 }

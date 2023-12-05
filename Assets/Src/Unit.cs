@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private PlayerController playerController;
+    [SerializeField] public PlayerController playerController;
     [SerializeField] public int numberOfUnitMembers = 5;
     [SerializeField] public int memberHP = 50;
     [SerializeField] public float unitSpeed = 1f;
@@ -126,7 +126,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    public void OnDestroy()
     {
         if (playerController != null)
         {
